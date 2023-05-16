@@ -8,7 +8,11 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "standalone": true
+          "standalone": true,
+          "inlineStyle": true,
+          "inlineTemplate": true,
+          "flat": true,
+          "skipTests": true
         },
         "@schematics/angular:directive": {
           "standalone": true
@@ -37,6 +41,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -100,6 +105,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
