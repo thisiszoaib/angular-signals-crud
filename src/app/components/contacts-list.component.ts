@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  effect,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { ContactsService } from '../services/contacts.service';
@@ -11,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
   template: `
     <mat-list>
-      <mat-list-item *ngFor="let contact of contactsService.contacts()">
+      <mat-list-item *ngFor="let contact of contacts()">
         <h3 matListItemTitle>
           {{ contact.name }}
         </h3>
@@ -33,4 +39,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ContactsListComponent {
   contactsService = inject(ContactsService);
+
+  contacts = this.contactsService.contacts;
+
+  constructor() {}
 }

@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { Contact } from '../model/contact.model';
 import { Router } from '@angular/router';
 import { LoaderService } from './loader.service';
@@ -101,6 +101,14 @@ export class ContactsService {
       email: 'jkeenj@bizjournals.com',
     },
   ]);
+
+  readonly MAX_CONTACTS_ALLOWED = 21;
+
+  totalContacts = computed(() => this.contacts().length);
+
+  maxReached = computed(
+    () => this.totalContacts() >= this.MAX_CONTACTS_ALLOWED
+  );
 
   router = inject(Router);
   loader = inject(LoaderService);
