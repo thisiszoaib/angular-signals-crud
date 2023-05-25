@@ -1,7 +1,6 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { Contact } from '../model/contact.model';
-import { Router } from '@angular/router';
-import { LoaderService } from './loader.service';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Contact } from '../models/contact.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -102,34 +101,26 @@ export class ContactsService {
     },
   ]);
 
-  readonly MAX_CONTACTS_ALLOWED = 21;
-
   totalContacts = computed(() => this.contacts().length);
 
-  maxReached = computed(
-    () => this.totalContacts() >= this.MAX_CONTACTS_ALLOWED
-  );
+  maxReached = computed(() => this.totalContacts() >= 21);
+
+  constructor() {}
 
   router = inject(Router);
-  loader = inject(LoaderService);
 
   addContact(newContact: Contact) {
-    this.loader.showLoader();
-
     setTimeout(() => {
       this.contacts.update((contacts) => [newContact, ...contacts]);
-      this.loader.hideLoader();
-      this.router.navigate(['/']);
-    }, 2000);
+      this.router.navigate(['']);
+    }, 1000);
   }
 
-  deleteContact(email: string) {
-    this.loader.showLoader();
+  deleteContact(contact: Contact) {
     setTimeout(() => {
       this.contacts.update((contacts) =>
-        contacts.filter((c) => c.email !== email)
+        contacts.filter((c) => c.email !== contact.email)
       );
-      this.loader.hideLoader();
-    }, 2000);
+    }, 1000);
   }
 }

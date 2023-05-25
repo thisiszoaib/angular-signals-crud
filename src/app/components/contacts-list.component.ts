@@ -1,15 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  effect,
-  inject,
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { ContactsService } from '../services/contacts.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Contact } from '../models/contact.model';
 
 @Component({
   selector: 'app-contacts-list',
@@ -24,23 +19,19 @@ import { MatIconModule } from '@angular/material/icon';
         <p matListItemLine>
           {{ contact.email }}
         </p>
-        <button
-          matListItemMeta
-          mat-icon-button
-          (click)="contactsService.deleteContact(contact.email)"
-        >
+        <button matListItemMeta mat-icon-button (click)="delete(contact)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
   `,
-  styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [],
 })
 export class ContactsListComponent {
   contactsService = inject(ContactsService);
-
   contacts = this.contactsService.contacts;
 
-  constructor() {}
+  delete(contact: Contact) {
+    this.contactsService.deleteContact(contact);
+  }
 }

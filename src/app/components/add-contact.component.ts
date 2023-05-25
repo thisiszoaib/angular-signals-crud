@@ -1,35 +1,35 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ContactsService } from '../services/contacts.service';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ContactsService } from '../services/contacts.service';
 
 @Component({
   selector: 'app-add-contact',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RouterModule,
+    FormsModule,
   ],
   template: `
     <div class="container">
-      <h2>Add Contact</h2>
-      <div class="fields">
+      <h2>Add New Contact</h2>
+      <div class="form">
         <mat-form-field>
-          <input [(ngModel)]="name" placeholder="Name" matInput />
+          <input [(ngModel)]="name" matInput placeholder="Name" />
         </mat-form-field>
         <mat-form-field>
-          <input [(ngModel)]="email" placeholder="Email" matInput />
+          <input [(ngModel)]="email" matInput placeholder="Email Address" />
         </mat-form-field>
         <mat-form-field>
-          <input [(ngModel)]="phone" placeholder="Phone" matInput />
+          <input [(ngModel)]="phone" matInput placeholder="Phone" />
         </mat-form-field>
       </div>
       <div class="actions">
@@ -44,9 +44,9 @@ import { RouterModule } from '@angular/router';
         padding: 24px;
       }
 
-      .fields {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+      .form {
+        display: flex;
+        flex-direction: column;
         gap: 8px;
       }
 
@@ -56,20 +56,16 @@ import { RouterModule } from '@angular/router';
       }
     `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddContactComponent {
-  contactsService = inject(ContactsService);
-
   name = '';
   email = '';
   phone = '';
 
+  contactsService = inject(ContactsService);
+
   save() {
-    this.contactsService.addContact({
-      name: this.name,
-      email: this.email,
-      phone: this.phone,
-    });
+    const payload = { name: this.name, phone: this.phone, email: this.email };
+    this.contactsService.addContact(payload);
   }
 }
