@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ContactsService } from '../services/contacts.service';
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-contact',
@@ -17,6 +25,7 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     MatButtonModule,
     RouterModule,
+    MatSelectModule,
   ],
   template: `
     <div class="container">
@@ -31,6 +40,24 @@ import { RouterModule } from '@angular/router';
         <mat-form-field>
           <input [(ngModel)]="phone" placeholder="Phone" matInput />
         </mat-form-field>
+        <!-- <mat-form-field>
+          <mat-select
+            [ngModel]="country()"
+            placeholder="Country"
+            (ngModelChange)="country.set($event)"
+          >
+            <mat-option *ngFor="let country of countries()" [value]="country">{{
+              country
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [(ngModel)]="city" placeholder="City">
+            <mat-option *ngFor="let city of cities()" [value]="city">{{
+              city
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
       </div>
       <div class="actions">
         <button mat-raised-button color="primary" (click)="save()">Save</button>
@@ -64,6 +91,21 @@ export class AddContactComponent {
   name = '';
   email = '';
   phone = '';
+  city = '';
+
+  countries = signal(['United Kingdom', 'Pakistan', 'India']);
+
+  country = signal('');
+
+  cities = computed(() => {
+    if (this.country() === 'United Kingdom')
+      return ['London', 'Manchester', 'Glasgow'];
+    if (this.country() === 'Pakistan')
+      return ['Lahore', 'Karachi', 'Islamabad'];
+    if (this.country() === 'India') return ['Delhi', 'Mumbai', 'Hyderabad'];
+
+    return [];
+  });
 
   save() {
     this.contactsService.addContact({
