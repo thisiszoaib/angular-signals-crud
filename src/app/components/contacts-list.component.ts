@@ -27,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
         <button
           matListItemMeta
           mat-icon-button
-          (click)="contactsService.deleteContact(contact.email)"
+          (click)="contactsService.deleteContact(contact.id)"
         >
           <mat-icon>delete</mat-icon>
         </button>
