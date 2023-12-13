@@ -38,7 +38,7 @@ testem.log
 /typings
 
 # Firebase
-/src/firebaseConfig.ts
+/src/app/firebaseConfig.ts
 
 # System files
 .DS_Store
