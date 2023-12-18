@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { Contact } from '../model/contact.model';
 import { Router } from '@angular/router';
 import { LoaderService } from './loader.service';
@@ -7,16 +7,27 @@ import {
   Firestore,
   addDoc,
   collection,
+  collectionData,
   deleteDoc,
   doc,
-  getDocs,
 } from '@angular/fire/firestore';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactsService {
-  contacts = signal<Contact[]>([]);
+  firestore = inject(Firestore);
+  contactsCollection = collection(
+    this.firestore,
+    'contacts'
+  ) as CollectionReference<Contact>;
+  contacts = toSignal(
+    collectionData(this.contactsCollection, { idField: 'id' }),
+    {
+      initialValue: [],
+    }
+  );
 
   readonly MAX_CONTACTS_ALLOWED = 50;
 
@@ -28,26 +39,12 @@ export class ContactsService {
 
   router = inject(Router);
   loader = inject(LoaderService);
-  firestore = inject(Firestore);
 
-  contactsCollection = collection(
-    this.firestore,
-    'contacts'
-  ) as CollectionReference<Contact>;
-
-  constructor() {
-    this.fetchContacts();
-  }
-
-  async fetchContacts() {
-    const contacts = await getDocs(this.contactsCollection);
-    this.contacts.set(contacts.docs.map((c) => ({ ...c.data(), id: c.id })));
-  }
+  constructor() {}
 
   async addContact(newContact: Partial<Contact>) {
     this.loader.showLoader();
     await addDoc(this.contactsCollection, { ...newContact });
-    await this.fetchContacts();
     this.loader.hideLoader();
     this.router.navigate(['/']);
   }
@@ -56,7 +53,6 @@ export class ContactsService {
     this.loader.showLoader();
     const docRef = doc(this.firestore, 'contacts', id);
     await deleteDoc(docRef);
-    await this.fetchContacts();
     this.loader.hideLoader();
   }
 }
