@@ -12,10 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-contacts-list',
-  standalone: true,
-  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
-  template: `
+    selector: 'app-contacts-list',
+    imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
+    template: `
     <mat-list>
       <mat-list-item *ngFor="let contact of contacts()">
         <h3 matListItemTitle>
@@ -34,8 +33,8 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-list-item>
     </mat-list>
   `,
-  styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: [``],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsListComponent {
   contactsService = inject(ContactsService);

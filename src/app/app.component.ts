@@ -10,19 +10,18 @@ import { LoaderService } from './services/loader.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-  ],
-  template: `
+    selector: 'app-root',
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+    ],
+    template: `
     <mat-toolbar color="primary"
       >My Contacts ({{ totalContacts() }})
 
@@ -36,8 +35,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
       *ngIf="loading()"
     ></mat-progress-spinner>
   `,
-  styles: [
-    `
+    styles: [
+        `
       mat-toolbar {
         justify-content: space-between;
       }
@@ -49,7 +48,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         transform: translate(-50%, -50%);
       }
     `,
-  ],
+    ]
 })
 export class AppComponent {
   title = 'Angular Signals Crud';

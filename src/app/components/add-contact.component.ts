@@ -16,18 +16,17 @@ import { RouterModule } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-add-contact',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterModule,
-    MatSelectModule,
-  ],
-  template: `
+    selector: 'app-add-contact',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        RouterModule,
+        MatSelectModule,
+    ],
+    template: `
     <div class="container">
       <h2>Add Contact</h2>
       <div class="fields">
@@ -65,8 +64,8 @@ import { MatSelectModule } from '@angular/material/select';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .container {
         padding: 24px;
       }
@@ -82,8 +81,8 @@ import { MatSelectModule } from '@angular/material/select';
         gap: 8px;
       }
     `,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddContactComponent {
   contactsService = inject(ContactsService);
