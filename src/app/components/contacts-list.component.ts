@@ -1,45 +1,63 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  effect,
-  inject,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
-import { ContactsService } from '../services/contacts.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
-    selector: 'app-contacts-list',
-    imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
-    template: `
+  selector: 'app-contacts-list',
+  standalone: true,
+  imports: [
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    RouterModule,
+  ],
+  template: `
     <mat-list>
-      <mat-list-item *ngFor="let contact of contacts()">
-        <h3 matListItemTitle>
-          {{ contact.name }}
-        </h3>
-        <p matListItemLine>
-          {{ contact.email }}
-        </p>
-        <button
-          matListItemMeta
-          mat-icon-button
-          (click)="contactsService.deleteContact(contact.email)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
+      @for (contact of contactsResource.value(); track contact.id) {
+      <mat-list-item>
+        <h3 matListItemTitle>{{ contact.name }}</h3>
+        <p matListItemLine>{{ contact.email }}</p>
+        <div matListItemMeta>
+          <button mat-icon-button [routerLink]="['/edit', contact.id]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteContact(contact.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </mat-list-item>
+      }
     </mat-list>
+    @if (loading()) {
+    <mat-progress-spinner
+      mode="indeterminate"
+      diameter="50"
+    ></mat-progress-spinner>
+    }
   `,
-    styles: [``],
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsListComponent {
-  contactsService = inject(ContactsService);
+  apiService = inject(ApiService);
 
-  contacts = this.contactsService.contacts;
+  contactsResource = resource({
+    loader: () => this.apiService.getContacts(),
+  });
 
-  constructor() {}
+  deleting = signal(false);
+
+  loading = computed(
+    () => this.deleting() || this.contactsResource.isLoading()
+  );
+
+  async deleteContact(id: string) {
+    this.deleting.set(true);
+    await this.apiService.deleteContact(id);
+    this.deleting.set(false);
+    this.contactsResource.reload();
+  }
 }
