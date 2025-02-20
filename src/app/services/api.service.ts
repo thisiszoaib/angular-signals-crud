@@ -143,6 +143,9 @@ export class ApiService {
 
   async getContacts(): Promise<Contact[]> {
     await this.simulateDelay();
+
+    // throw new Error('Error fetching contacts');
+
     return [...this.contacts];
   }
 
@@ -161,9 +164,9 @@ export class ApiService {
     this.contacts = this.contacts.filter((c) => c.id !== id);
   }
 
-  async updateContact(id: string, updatedContact: Contact): Promise<Contact> {
+  async updateContact(updatedContact: Contact): Promise<Contact> {
     await this.simulateDelay();
-    const index = this.contacts.findIndex((c) => c.id === id);
+    const index = this.contacts.findIndex((c) => c.id === updatedContact.id);
     if (index === -1) {
       throw new Error('Contact not found');
     }

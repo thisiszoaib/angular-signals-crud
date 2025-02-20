@@ -52,7 +52,7 @@ export class EditContactComponent {
 
   async updateContact(contact: Contact) {
     this.saving.set(true);
-    await this.apiService.updateContact(this.id(), contact);
+    await this.apiService.updateContact(contact);
     this.saving.set(false);
     this.router.navigate(['/']);
   }

@@ -68,7 +68,6 @@ export class ContactFormComponent {
   title = input<string>('');
   contact = input<Contact>();
 
-  id = linkedSignal(() => this.contact()?.id ?? '');
   name = linkedSignal(() => this.contact()?.name ?? '');
   email = linkedSignal(() => this.contact()?.email ?? '');
   phone = linkedSignal(() => this.contact()?.phone ?? '');
@@ -77,7 +76,7 @@ export class ContactFormComponent {
 
   onSubmit() {
     this.save.emit({
-      id: this.id(),
+      id: this.contact()?.id ?? '',
       name: this.name(),
       email: this.email(),
       phone: this.phone(),
